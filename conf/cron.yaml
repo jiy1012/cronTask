@@ -1,3 +1,3 @@
 tasks:
-  - {schedule: "1 * * * * *",message: "发日报了 @所有人",dingding: ""}
-  - {schedule: "30 * * * * *",message: "发周报了 @liuyi @所有人",dingding: ""}
+  - {schedule: "1 * * * * *",message: "发日报了啊",atAll: true,dingding: ""}
+  - {schedule: "30 * * * * *",message: "发周报了啦",atPhone: "18210048936",dingding: ""}

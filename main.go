@@ -1,10 +1,12 @@
 package main
 
 import (
+	"cronTask/comm"
 	"cronTask/config"
 	"flag"
 	"fmt"
 	"github.com/robfig/cron"
+	"strings"
 )
 
 type SchduleActiveCallback func(*config.TaskConfig)
@@ -37,7 +39,9 @@ func main() {
 
 	cr := cron.New()
 	for _, task := range c.Tasks {
-		job := NewScheduleJob(&task, sendDingDing)
+		t := task
+		fmt.Println(t)
+		job := NewScheduleJob(&t, sendDingDing)
 		cr.AddJob(task.Schedule, job)
 	}
 	cr.Start()
@@ -46,5 +50,11 @@ func main() {
 }
 
 func sendDingDing(task *config.TaskConfig) {
-	fmt.Println("dingding:", task.Dingding, "message:", task.Message)
+	dd := comm.DDRobotStruct{}
+	dd.Text.Content = task.Message
+	dd.Msgtype = "string"
+	dd.At.Atmobiles = strings.Split(task.AtPhone, ",")
+	dd.At.Isatall = task.AtAll
+	fmt.Printf("%+v\n", dd)
+	comm.SendDDRobot(dd, task.Dingding)
 }
