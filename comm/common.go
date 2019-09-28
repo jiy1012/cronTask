@@ -3,6 +3,8 @@ package comm
 import (
 	"bytes"
 	"compress/gzip"
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -47,6 +49,36 @@ func JsonEncodeMapToByte(stringMap map[string]interface{}) []byte {
 	return jsonBytes
 }
 
+/**
+ * @note
+ * 获取md5 hash串
+ * @param string text 源串
+ *
+ * @return string
+ */
+func MD5Hash(text string) string {
+	hash := md5.Sum([]byte(text))
+	return hex.EncodeToString(hash[:])
+}
+
+func JsonEncode(data interface{}) string {
+	s, e := json.Marshal(data)
+	if e != nil {
+		return ""
+	}
+	return string(s)
+}
+
+func JsonDecode(data string, inter interface{}) error {
+	return json.Unmarshal([]byte(data), inter)
+}
+
+func StructToMap(data interface{}) map[string]interface{} {
+	m := make(map[string]interface{})
+	j, _ := json.Marshal(data)
+	_ = json.Unmarshal(j, &m)
+	return m
+}
 func SendDDRobot(robotStruct DDRobotStruct, robotWebHook string) {
 	jsonParams, err := json.Marshal(robotStruct)
 	if err != nil {
@@ -62,12 +94,11 @@ func SendDDRobot(robotStruct DDRobotStruct, robotWebHook string) {
 		return
 	}
 	defer func() {
-		if res != nil {
+		if res != nil && res.Body != nil {
 			defer res.Body.Close()
 		}
 	}()
 	body, _ := ioutil.ReadAll(res.Body)
 	fmt.Println(res)
 	fmt.Println(string(body))
-
 }
