@@ -6,8 +6,8 @@ import (
 )
 
 func main() {
-	cFile := flag.String("-conf", "./conf/cron.yaml", "配置文件地址")
-
+	cFile := flag.String("conf", "./conf/cron.yaml", "配置文件地址")
+	flag.Parse()
 	config.InitConfig(*cFile)
 	config.ReloadCr()
 	config.Cr.Start()
