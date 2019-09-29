@@ -67,7 +67,7 @@ func ReloadCr() {
 	//备份旧的keyMap
 	keyMap := map[string]int{}
 	//旧的taskMap
-	for key, _ := range TaskMap {
+	for key := range TaskMap {
 		keyMap[key] = 1
 	}
 	//新的task配置
@@ -85,7 +85,7 @@ func ReloadCr() {
 				job := NewScheduleJob(&t, SendTaskDingDing)
 				id, err := Cr.AddJob(task.Schedule, job)
 				if err != nil {
-					fmt.Println("add job err:",err.Error())
+					fmt.Println("add job err:", err.Error())
 				}
 				TaskMap[key].Id = id
 				TaskMap[key].Md5 = comm.MD5Hash(comm.JsonEncode(task))
@@ -97,7 +97,7 @@ func ReloadCr() {
 			job := NewScheduleJob(&t, SendTaskDingDing)
 			id, err := Cr.AddJob(task.Schedule, job)
 			if err != nil {
-				fmt.Println("add job err:",err.Error())
+				fmt.Println("add job err:", err.Error())
 			}
 			tm := &Tm{
 				Md5: comm.MD5Hash(comm.JsonEncode(task)),
@@ -110,7 +110,7 @@ func ReloadCr() {
 
 	}
 	//剩余要删除的任务
-	for key, _ := range keyMap {
+	for key := range keyMap {
 		if v, ok := TaskMap[key]; ok {
 			Cr.Remove(v.Id)
 			fmt.Printf("remove task:%+v \n", v)

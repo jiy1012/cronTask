@@ -22,7 +22,7 @@
 #### task属性
 | 属性     | 类型   | 值 | 备注                                    |   |
 |----------|--------|----|-----------------------------------------|---|
-| schedule | string |    | 运行周期                                |   |
+| schedule | string |    | 运行周期 参考：https://en.wikipedia.org/wiki/Cron                               |   |
 | message  | string |    | 要发送钉钉的消息                        |   |
 | dingding | string |    | 钉钉的webhook地址                       |   |
 | title    | string |    | 任务名称：唯一 用来标识任务             |   |
