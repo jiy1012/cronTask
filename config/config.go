@@ -138,7 +138,7 @@ func NewScheduleJob(task *TaskConfig, callback SchduleActiveCallback) *ScheduleJ
 func SendTaskDingDing(task *TaskConfig) {
 	dd := comm.DDRobotStruct{}
 	dd.Text.Content = task.Message
-	dd.Msgtype = "string"
+	dd.Msgtype = "text"
 	dd.At.Atmobiles = strings.Split(task.AtPhone, ",")
 	dd.At.Isatall = task.AtAll
 	fmt.Printf("send task %+v\n", dd)
