@@ -3,16 +3,20 @@ package config
 import "github.com/robfig/cron/v3"
 
 type Config struct {
-	Tasks []TaskConfig `mapstructure:"tasks"`
+	Tasks   []TaskConfig  `mapstructure:"tasks"`
+	Holiday HolidayConfig `mapstructure:"holiday"`
 }
-
+type HolidayConfig struct {
+	Url string
+}
 type TaskConfig struct {
-	Title    string
-	Schedule string
-	Message  string
-	AtAll    bool   //是否@所有人
-	AtPhone  string //@某个人
-	Dingding string
+	Title              string
+	Schedule           string
+	Message            string
+	AtAll              bool   //是否@所有人
+	AtPhone            string //@某个人
+	Dingding           string
+	SkipChineseHoliday bool //是否跳过中国节假日
 }
 
 type Tm struct {
@@ -20,9 +24,10 @@ type Tm struct {
 	Id  cron.EntryID
 }
 
-type SchduleActiveCallback func(*TaskConfig)
+type SchduleActiveCallback func(*Config, *TaskConfig)
 
 type ScheduleJob struct {
+	conf     *Config
 	task     *TaskConfig
 	callback SchduleActiveCallback
 }

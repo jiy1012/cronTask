@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -95,10 +96,60 @@ func SendDDRobot(robotStruct DDRobotStruct, robotWebHook string) {
 	}
 	defer func() {
 		if res != nil && res.Body != nil {
-			defer res.Body.Close()
+			_ = res.Body.Close()
 		}
 	}()
 	body, _ := ioutil.ReadAll(res.Body)
 	fmt.Println(res)
 	fmt.Println(string(body))
+}
+
+func GetFullHoliday(url, date string) FullHoliday {
+	url += "?d=" + date + "&back=json&info=1"
+	req, _ := http.NewRequest("GET", url, nil)
+	res, _ := http.DefaultClient.Do(req)
+	defer func() {
+		if res != nil && res.Body != nil {
+			_ = res.Body.Close()
+		}
+	}()
+	body, _ := ioutil.ReadAll(res.Body)
+	r := FullHoliday{}
+	_ = JsonDecode(string(body), &r)
+	return r
+}
+
+func GetJsonHoliday(url, date string) int {
+	url += "?d=" + date + "&back=json"
+	req, _ := http.NewRequest("GET", url, nil)
+	res, _ := http.DefaultClient.Do(req)
+	defer func() {
+		if res != nil && res.Body != nil {
+			_ = res.Body.Close()
+		}
+	}()
+	body, _ := ioutil.ReadAll(res.Body)
+	r := map[string]int{}
+	_ = JsonDecode(string(body), &r)
+	return r[date]
+}
+func GetSampleHoliday(url, date string) (int, error) {
+	//url := "http://tool.bitefu.net/jiari/?d=20191001&back=json"
+	url += "?d=" + date + "&back=text"
+	req, _ := http.NewRequest("GET", url, nil)
+	res, _ := http.DefaultClient.Do(req)
+	defer func() {
+		if res != nil && res.Body != nil {
+			_ = res.Body.Close()
+		}
+	}()
+	body, _ := ioutil.ReadAll(res.Body)
+	return strconv.Atoi(string(body))
+}
+func CheckIsChineseWorkday(url string, date string) bool {
+	holidayType := GetJsonHoliday(url, date)
+	if holidayType == HOLIDAY_TYPE_WORK {
+		return true
+	}
+	return false
 }

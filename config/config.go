@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 var TaskMap map[string]*Tm = map[string]*Tm{}
@@ -82,7 +83,7 @@ func ReloadCr() {
 				Cr.Remove(tTm.Id)
 				t := task
 				fmt.Printf("reload:%+v \n", t)
-				job := NewScheduleJob(&t, SendTaskDingDing)
+				job := NewScheduleJob(&C, &t, SendTaskDingDing)
 				id, err := Cr.AddJob(task.Schedule, job)
 				if err != nil {
 					fmt.Println("add job err:", err.Error())
@@ -94,7 +95,7 @@ func ReloadCr() {
 			//新配置没启动过，启动
 			t := task
 			fmt.Printf("start:%+v \n", t)
-			job := NewScheduleJob(&t, SendTaskDingDing)
+			job := NewScheduleJob(&C, &t, SendTaskDingDing)
 			id, err := Cr.AddJob(task.Schedule, job)
 			if err != nil {
 				fmt.Println("add job err:", err.Error())
@@ -121,26 +122,32 @@ func ReloadCr() {
 
 func (this *ScheduleJob) Run() {
 	if nil != this.callback {
-		this.callback(this.task)
+		this.callback(this.conf, this.task)
 	} else {
 		fmt.Println("error no callback")
 	}
 }
 
-func NewScheduleJob(task *TaskConfig, callback SchduleActiveCallback) *ScheduleJob {
+func NewScheduleJob(c *Config, task *TaskConfig, callback SchduleActiveCallback) *ScheduleJob {
 	instance := &ScheduleJob{
+		conf:     c,
 		task:     task,
 		callback: callback,
 	}
 	return instance
 }
 
-func SendTaskDingDing(task *TaskConfig) {
-	dd := comm.DDRobotStruct{}
-	dd.Text.Content = task.Message
-	dd.Msgtype = "text"
-	dd.At.Atmobiles = strings.Split(task.AtPhone, ",")
-	dd.At.Isatall = task.AtAll
-	fmt.Printf("send task %+v\n", dd)
-	comm.SendDDRobot(dd, task.Dingding)
+func SendTaskDingDing(c *Config, task *TaskConfig) {
+	if task.SkipChineseHoliday {
+		isWork := comm.CheckIsChineseWorkday(c.Holiday.Url, time.Now().Format("20060102"))
+		if isWork {
+			dd := comm.DDRobotStruct{}
+			dd.Text.Content = task.Message
+			dd.Msgtype = "text"
+			dd.At.Atmobiles = strings.Split(task.AtPhone, ",")
+			dd.At.Isatall = task.AtAll
+			fmt.Printf("send task %+v\n", dd)
+			comm.SendDDRobot(dd, task.Dingding)
+		}
+	}
 }
