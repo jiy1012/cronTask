@@ -1,3 +1,6 @@
+holiday:
+  url: http://tool.bitefu.net/jiari/
 tasks:
-  - {schedule: "*/1 * * * *",message: "发日报了",atAll: true,dingding: "",title: "日报提醒1"}
-  - {schedule: "*/2 * * * *",message: "发周报了",atPhone: "111",dingding: "",title: "周报提醒"}
+  - {schedule: "0 18 * * *",message: "发日报了",atAll: true,dingding: "",title: "全员日报提醒",skipChineseHoliday: true}
+  - {schedule: "30 20 * * *",message: "发日报",atPhone: "",dingding: "",title: "个人日报提醒",skipChineseHoliday: true}
+  - {schedule: "30 20 * * 5",message: "发周报",atPhone: "",dingding: "",title: "个人周报提醒",skipChineseHoliday: true}

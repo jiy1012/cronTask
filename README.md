@@ -28,3 +28,4 @@
 | title    | string |    | 任务名称：唯一 用来标识任务             |   |
 | atAll    | bool   |    | 是否@所有人                             |   |
 | atPhone  | string |    | 要@的用户的手机号，多个用户使用逗号分隔 |   |
+| skipChineseHoliday| bool | | 是否跳过中国节假日 |
