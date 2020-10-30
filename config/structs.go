@@ -15,7 +15,8 @@ type TaskConfig struct {
 	Message            string
 	AtAll              bool   //是否@所有人
 	AtPhone            string //@某个人
-	Dingding           string
+	Type               string
+	WebhookUrl         string
 	SkipChineseHoliday bool //是否跳过中国节假日
 }
 

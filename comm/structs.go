@@ -1,17 +1,33 @@
 package comm
 
 //钉钉机器人报警结构体
-type TextStruct struct {
+type DDTextStruct struct {
 	Content string `json:"content"`
 }
-type AtStruct struct {
+type DDAtStruct struct {
 	Atmobiles []string `json:"atMobiles"`
 	Isatall   bool     `json:"isAtAll"`
 }
 type DDRobotStruct struct {
-	Msgtype string     `json:"msgtype"`
-	Text    TextStruct `json:"text"`
-	At      AtStruct   `json:"at"`
+	Msgtype string       `json:"msgtype"`
+	Text    DDTextStruct `json:"text"`
+	At      DDAtStruct   `json:"at"`
+}
+
+/*
+{
+    "msg_type": "text",
+    "content": {
+        "text": "新更新提醒"
+    }
+}
+*/
+type FeiShuRobotStruct struct {
+	Msgtype string              `json:"msg_type"`
+	Content FeiShuContentStruct `json:"content"`
+}
+type FeiShuContentStruct struct {
+	Text string `json:"text"`
 }
 
 const HOLIDAY_BACK_TYPE_JSON = "json"
@@ -21,6 +37,11 @@ const (
 	HOLIDAY_TYPE_WORK     = 0 //工作日
 	HOLIDAY_TYPE_HOLIDAY  = 1 //假日
 	HOLIDAY_TYPE_FESTIVAL = 2 //节日
+)
+
+const (
+	TASK_TYPE_DINGDING = "dingding"
+	TASK_TYPE_FEISHU   = "feishu"
 )
 
 //{

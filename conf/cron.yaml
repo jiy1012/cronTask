@@ -1,6 +1,7 @@
 holiday:
   url: http://tool.bitefu.net/jiari/
 tasks:
-  - {schedule: "0 18 * * *",message: "发日报了",atAll: true,dingding: "",title: "全员日报提醒",skipChineseHoliday: true}
-  - {schedule: "30 20 * * *",message: "发日报",atPhone: "",dingding: "",title: "个人日报提醒",skipChineseHoliday: true}
-  - {schedule: "30 20 * * 5",message: "发周报",atPhone: "",dingding: "",title: "个人周报提醒",skipChineseHoliday: true}
+  - { schedule: "0 18 * * *",message: "发日报了",atAll: true,type: "dingding",webhookUrl: "",title: "全员日报提醒",skipChineseHoliday: true }
+  - { schedule: "30 20 * * *",message: "发日报",atPhone: "",type: "dingding",webhookUrl: "",title: "个人日报提醒",skipChineseHoliday: true }
+  - { schedule: "30 20 * * 5",message: "发周报",atPhone: "",type: "dingding",webhookUrl: "",title: "个人周报提醒",skipChineseHoliday: true }
+  - { schedule: "*/1 * * * *",message: "发周报",atPhone: "",type: "feishu",webhookUrl: "https://open.feishu.cn/open-apis/bot/v2/hook/1137fe90-0622-4cc5-be63-a50463baa6de",title: "个人周报提醒",skipChineseHoliday: true }

@@ -153,3 +153,27 @@ func CheckIsChineseWorkday(url string, date string) bool {
 	}
 	return false
 }
+
+func SendFeiShuRobot(robotStruct FeiShuRobotStruct, robotWebHook string) {
+	jsonParams, err := json.Marshal(robotStruct)
+	if err != nil {
+		return
+	}
+	jsonString := string(jsonParams)
+	payload := strings.NewReader(jsonString)
+	req, _ := http.NewRequest("POST", robotWebHook, payload)
+	req.Header.Add("content-type", "application/json")
+	req.Header.Add("cache-control", "no-cache")
+	res, _ := http.DefaultClient.Do(req)
+	if res == nil {
+		return
+	}
+	defer func() {
+		if res != nil && res.Body != nil {
+			_ = res.Body.Close()
+		}
+	}()
+	body, _ := ioutil.ReadAll(res.Body)
+	fmt.Println(res)
+	fmt.Println(string(body))
+}
