@@ -24,7 +24,8 @@
 |----------|--------|----|-----------------------------------------|---|
 | schedule | string |    | 运行周期 参考：https://en.wikipedia.org/wiki/Cron                               |   |
 | message  | string |    | 要发送钉钉的消息                        |   |
-| dingding | string |    | 钉钉的webhook地址                       |   |
+| type | string |    | 类型：dingding/feishu                       |   |
+| webhookUrl | string |    | 钉钉的webhook地址                       |   |
 | title    | string |    | 任务名称：唯一 用来标识任务             |   |
 | atAll    | bool   |    | 是否@所有人                             |   |
 | atPhone  | string |    | 要@的用户的手机号，多个用户使用逗号分隔 |   |
