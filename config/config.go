@@ -86,7 +86,7 @@ func ReloadCr() {
 				job := NewScheduleJob(&C, &t, SendTaskDingDing)
 				id, err := Cr.AddJob(task.Schedule, job)
 				if err != nil {
-					fmt.Println("add job err:", err.Error(),"|", comm.JsonEncode(task))
+					fmt.Println("add job err:", err.Error(), "|", comm.JsonEncode(task))
 				}
 				TaskMap[key].Id = id
 				TaskMap[key].Md5 = comm.MD5Hash(comm.JsonEncode(task))
@@ -98,7 +98,7 @@ func ReloadCr() {
 			job := NewScheduleJob(&C, &t, SendTaskDingDing)
 			id, err := Cr.AddJob(task.Schedule, job)
 			if err != nil {
-				fmt.Println("add job err:", err.Error(),"|", comm.JsonEncode(task))
+				fmt.Println("add job err:", err.Error(), "|", comm.JsonEncode(task))
 			}
 			tm := &Tm{
 				Md5: comm.MD5Hash(comm.JsonEncode(task)),
@@ -140,22 +140,24 @@ func NewScheduleJob(c *Config, task *TaskConfig, callback SchduleActiveCallback)
 func SendTaskDingDing(c *Config, task *TaskConfig) {
 	if task.SkipChineseHoliday {
 		isWork := comm.CheckIsChineseWorkday(c.Holiday.Url, time.Now().Format("20060102"))
-		if isWork {
-			if task.Type == comm.TASK_TYPE_DINGDING {
-				dd := comm.DDRobotStruct{}
-				dd.Text.Content = task.Message
-				dd.Msgtype = "text"
-				dd.At.Atmobiles = strings.Split(task.AtPhone, ",")
-				dd.At.Isatall = task.AtAll
-				fmt.Printf("send task %+v\n", dd)
-				comm.SendDDRobot(dd, task.WebhookUrl)
-			} else if task.Type == comm.TASK_TYPE_FEISHU {
-				fs := comm.FeiShuRobotStruct{}
-				fs.Content.Text = task.Message
-				fs.Msgtype = "text"
-				fmt.Printf("send task %+v\n", fs)
-				comm.SendFeiShuRobot(fs, task.WebhookUrl)
-			}
+		if !isWork {
+			return
 		}
 	}
+	if task.Type == comm.TASK_TYPE_DINGDING {
+		dd := comm.DDRobotStruct{}
+		dd.Text.Content = task.Message
+		dd.Msgtype = "text"
+		dd.At.Atmobiles = strings.Split(task.AtPhone, ",")
+		dd.At.Isatall = task.AtAll
+		fmt.Printf("send task %+v\n", dd)
+		comm.SendDDRobot(dd, task.WebhookUrl)
+	} else if task.Type == comm.TASK_TYPE_FEISHU {
+		fs := comm.FeiShuRobotStruct{}
+		fs.Content.Text = task.Message
+		fs.Msgtype = "text"
+		fmt.Printf("send task %+v\n", fs)
+		comm.SendFeiShuRobot(fs, task.WebhookUrl)
+	}
+
 }
