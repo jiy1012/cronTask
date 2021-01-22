@@ -155,6 +155,9 @@ func SendTaskDingDing(c *Config, task *TaskConfig) {
 	} else if task.Type == comm.TASK_TYPE_FEISHU {
 		fs := comm.FeiShuRobotStruct{}
 		fs.Content.Text = task.Message
+		if task.AtAll {
+			fs.Content.Text = fmt.Sprintf("%s%s", "<at user_id=“all”> </at>", task.Message)
+		}
 		fs.Msgtype = "text"
 		fmt.Printf("send task %+v\n", fs)
 		comm.SendFeiShuRobot(fs, task.WebhookUrl)
