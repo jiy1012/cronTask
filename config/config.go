@@ -156,7 +156,7 @@ func SendTaskDingDing(c *Config, task *TaskConfig) {
 		fs := comm.FeiShuRobotStruct{}
 		fs.Content.Text = task.Message
 		if task.AtAll {
-			fs.Content.Text = fmt.Sprintf("%s%s", "<at user_id=“all”> </at>", task.Message)
+			fs.Content.Text = fmt.Sprintf("%s%s", "<at user_id=“all”> 所有人 </at>", task.Message)
 		}
 		fs.Msgtype = "text"
 		fmt.Printf("send task %+v\n", fs)
