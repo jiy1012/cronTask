@@ -100,8 +100,7 @@ func SendDDRobot(robotStruct DDRobotStruct, robotWebHook string) {
 		}
 	}()
 	body, _ := ioutil.ReadAll(res.Body)
-	fmt.Println(res)
-	fmt.Println(string(body))
+	fmt.Println(jsonString, robotWebHook, string(body))
 }
 
 func GetFullHoliday(url, date string) FullHoliday {
@@ -129,6 +128,7 @@ func GetJsonHoliday(url, date string) int {
 		}
 	}()
 	body, _ := ioutil.ReadAll(res.Body)
+	fmt.Println(url, string(body))
 	r := map[string]int{}
 	_ = JsonDecode(string(body), &r)
 	return r[date]
@@ -174,6 +174,5 @@ func SendFeiShuRobot(robotStruct FeiShuRobotStruct, robotWebHook string) {
 		}
 	}()
 	body, _ := ioutil.ReadAll(res.Body)
-	fmt.Println(res)
-	fmt.Println(string(body))
+	fmt.Println(jsonString, robotWebHook, string(body))
 }
